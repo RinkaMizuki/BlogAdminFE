@@ -9,15 +9,20 @@ import {
   NavItem,
   NavLink
 } from "shards-react";
+import { withRouter } from 'react-router-dom';
 
-export default class UserActions extends React.Component {
+import { get as getLogoutUser } from "../../../../services/httpRequest"
+
+class UserActions extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      visible: false
+      visible: false,
+      userLogin: JSON.parse(localStorage.getItem('userLogin'))
     };
 
+    this.handleLogout = this.handleLogout.bind(this);
     this.toggleUserActions = this.toggleUserActions.bind(this);
   }
 
@@ -27,16 +32,34 @@ export default class UserActions extends React.Component {
     });
   }
 
+  handleLogout = async () => {
+    try {
+      const logoutData = await getLogoutUser('/logout');
+      console.log(logoutData)
+    } catch (error) {
+      console.log(error);
+    } finally {
+      localStorage.removeItem('userLogin');
+      this.props.history.push('/');
+    }
+  }
+
   render() {
     return (
       <NavItem tag={Dropdown} caret toggle={this.toggleUserActions}>
         <DropdownToggle caret tag={NavLink} className="text-nowrap px-3">
           <img
             className="user-avatar rounded-circle mr-2"
-            src={require("./../../../../images/avatars/0.jpg")}
-            alt="User Avatar"
+            style={{
+              objectFit: "cover",
+              maxHeight: "2.5rem",
+              width: "100%",
+              height: "100%"
+            }}
+            src={this.state.userLogin ? this.state.userLogin.avatar : ""}
+            alt={this.state.userLogin ? this.state.userLogin.url : ""}
           />{" "}
-          <span className="d-none d-md-inline-block">Sierra Brooks</span>
+          <span className="d-none d-md-inline-block">{this.state.userLogin ? this.state.userLogin.username : ""}</span>
         </DropdownToggle>
         <Collapse tag={DropdownMenu} right small open={this.state.visible}>
           <DropdownItem tag={Link} to="user-profile">
@@ -52,7 +75,7 @@ export default class UserActions extends React.Component {
             <i className="material-icons">&#xE896;</i> Transactions
           </DropdownItem>
           <DropdownItem divider />
-          <DropdownItem tag={Link} to="/" className="text-danger">
+          <DropdownItem className="text-danger" onClick={this.handleLogout}>
             <i className="material-icons text-danger">&#xE879;</i> Logout
           </DropdownItem>
         </Collapse>
@@ -60,3 +83,5 @@ export default class UserActions extends React.Component {
     );
   }
 }
+
+export default withRouter(UserActions)

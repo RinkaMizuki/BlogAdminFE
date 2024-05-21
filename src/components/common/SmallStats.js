@@ -51,7 +51,6 @@ class SmallStats extends React.Component {
                 isplay: false,
                 // Avoid getting the graph line cut of at the top of the canvas.
                 // Chart.js bug link: https://github.com/chartjs/Chart.js/issues/4790
-                suggestedMax: Math.max(...this.props.chartData[0].data) + 1
               }
             }
           ]
@@ -152,7 +151,6 @@ SmallStats.propTypes = {
   /**
    * The Small Stats variation.
    */
-  variation: PropTypes.string,
   /**
    * The label.
    */
@@ -161,41 +159,12 @@ SmallStats.propTypes = {
    * The value.
    */
   value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  /**
-   * The percentage number or string.
-   */
-  percentage: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  /**
-   * Whether is a value increase, or not.
-   */
-  increase: PropTypes.bool,
-  /**
-   * The Chart.js configuration object.
-   */
-  chartConfig: PropTypes.object,
-  /**
-   * The Chart.js options object.
-   */
-  chartOptions: PropTypes.object,
-  /**
-   * The chart data.
-   */
-  chartData: PropTypes.array.isRequired,
-  /**
-   * The chart labels.
-   */
-  chartLabels: PropTypes.array
+
 };
 
 SmallStats.defaultProps = {
-  increase: true,
-  percentage: 0,
   value: 0,
   label: "Label",
-  chartOptions: Object.create(null),
-  chartConfig: Object.create(null),
-  chartData: [],
-  chartLabels: []
 };
 
 export default SmallStats;

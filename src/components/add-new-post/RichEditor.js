@@ -6,15 +6,15 @@ import $ from "jquery";
 // import "react-quill/dist/quill.snow.css";
 // import "../../assets/quill.css";
 
-const RichEditor = () => {
+const RichEditor = ({ setPostTitle, setPostContent, postTitle }) => {
   return (
     <Card small className="mb-3">
       <CardBody>
         <Form className="add-new-post">
-          <FormInput size="lg" className="mb-3" placeholder="Your Post Title" />
+          <FormInput size="lg" className="mb-3" placeholder="Your Post Title" value={postTitle} onChange={(e) => setPostTitle(e.target.value)} />
           {/* <ReactQuill className="add-new-post__editor mb-1" /> */}
           <Editor
-            apiKey='dpggm8wc6avbkshf9zvjl2s3wsyxfs8mmkegxq64qk3v230h'
+            apiKey='xl972kp9v6u3mg2d8rzspy3mc2qwxkqbgtlktw9dwwrkggnk'
             init={{
               height: "1000px",
               plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed linkchecker a11ychecker tinymcespellchecker permanentpen powerpaste advtable advcode editimage advtemplate ai mentions tinycomments tableofcontents footnotes mergetags autocorrect typography inlinecss markdown',
@@ -22,7 +22,6 @@ const RichEditor = () => {
               setup: function (editor) {
                 const inp = $('<input id="tinymce-uploader" type="file" name="pic" accept="image/*" style="display:none">');
                 $(editor.getElement()).parent().append(inp);
-                console.log($(editor.getElement()).parent());
                 inp.on("change", function () {
                   const input = inp.get(0);
                   const file = input.files[0];
@@ -51,7 +50,10 @@ const RichEditor = () => {
               ],
               ai_request: (request, respondWith) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant")),
             }}
-            initialValue="Welcome to TinyMCE!"
+            initialValue=""
+            onEditorChange={(newValue, editor) => {
+              setPostContent(newValue)
+            }}
           />
         </Form>
       </CardBody>
