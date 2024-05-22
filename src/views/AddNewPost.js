@@ -4,7 +4,6 @@ import { Container, Row, Col, Button } from "shards-react";
 import PageTitle from "../components/common/PageTitle";
 import RichEditor from "../components/add-new-post/RichEditor";
 import SidebarCategories from "../components/add-new-post/SidebarCategories";
-import { post as createPost } from "../services/httpRequest"
 
 const AddNewPost = () => {
   const [cateId, setCateId] = useState(0);
@@ -29,6 +28,11 @@ const AddNewPost = () => {
       console.log(postData);
     } catch (error) {
       console.log(error);
+    } finally {
+      setCateId(0);
+      setPostContent("");
+      setPostThumb("");
+      setPostTitle("");
     }
   }
 

@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { Container, Row, Col } from "shards-react";
 import { get as getDashboardData } from "../services/httpRequest";
+import { withRouter } from "react-router-dom";
 
 import PageTitle from "./../components/common/PageTitle";
 import SmallStats from "./../components/common/SmallStats";
 
-const BlogOverview = ({ smallStats }) => {
+const BlogOverview = ({ history }) => {
   const [dashboardData, setDashboardData] = useState([])
 
   useEffect(() => {
@@ -15,13 +16,17 @@ const BlogOverview = ({ smallStats }) => {
         const data = await getDashboardData('/admin');
         setDashboardData([data]);
         localStorage.setItem('categories', JSON.stringify(data.categories_list))
+        if (data.status === 422) {
+          localStorage.removeItem('userLogin')
+          localStorage.removeItem('categories')
+          history.push('/')
+        }
       } catch (error) {
         console.log(error);
       }
     }
     fetchDataDashboard()
   }, [])
-  console.log(dashboardData);
   return (
     <Container fluid className="main-content-container px-4">
       {/* Page Header */}
@@ -191,4 +196,4 @@ BlogOverview.defaultProps = {
   ]
 };
 
-export default BlogOverview;
+export default withRouter(BlogOverview);
